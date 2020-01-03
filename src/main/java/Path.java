@@ -23,7 +23,7 @@ public class Path {
     public void cd(String newPath) {
         try {
             List<String> newPathDirectives = parsePath(newPath);
-            List<String> updatedPath = defineRoot(newPathDirectives);
+            List<String> updatedPath = defineRoot(newPath);
             for (String pathDirective: newPathDirectives) {
                 if (PARENT_DIRECTIVE.equals(pathDirective)) {
                     validatePathIsNotRoot(updatedPath);
@@ -40,7 +40,7 @@ public class Path {
 
     public static void main(String[] args) {
         Path path = new Path("/a/b/c/d");
-        path.cd("a/b");
+        path.cd("../x");
         System.out.println(path.getPath());
     }
 
@@ -73,9 +73,9 @@ public class Path {
         return directives;
     }
 
-    private List<String> defineRoot(List<String> newPathDirectives) {
+    private List<String> defineRoot(String newPath) {
         try {
-            return !isRootPath(newPathDirectives) && isRelative(newPathDirectives)
+            return !isRootPath(newPath) && isRelative(newPath)
                     ? parsePath(path)
                     : new ArrayList<>();
         } catch (InvalidPathException e) {
@@ -83,16 +83,16 @@ public class Path {
         }
     }
 
-    private boolean isRootPath(List<String> path) {
-        return path.isEmpty();
+    private boolean isRootPath(String path) {
+        return ROOT_PATH.equals(path);
     }
 
-    private boolean isRelative(List<String> path) {
-        return PARENT_DIRECTIVE.equals(path.get(0));
+    private boolean isRelative(String path) {
+        return path.startsWith(PARENT_DIRECTIVE) || !path.startsWith(PATH_SEPARATOR);
     }
 
     private void validatePathIsNotRoot(List<String> path) throws InvalidPathException {
-        if (isRootPath(path)) {
+        if (path.isEmpty()) {
             throw new InvalidPathException("Path is a root");
         }
     }
