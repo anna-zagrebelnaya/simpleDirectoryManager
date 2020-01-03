@@ -8,7 +8,7 @@ public class Path {
     private static final String ROOT_PATH = "/";
     private static final String PATH_SEPARATOR = "/";
     private static final String PARENT_DIRECTIVE = "..";
-    private static final String PATH_REGEX = "((\\/?\\.\\.\\/?)?(\\/?[A-z])?)";
+    private static final String PATH_REGEX = "((/?\\.\\./?)?(/?[A-z])?)";
 
     private String path;
 
